@@ -8,21 +8,24 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.VBox;
 
 public class HelloController {
     @FXML
     private Label welcomeText;
     @FXML
     private Canvas mainCanvas;
+    @FXML
+    private VBox mainWindow;
 
     @FXML
     protected void onHelloButtonClick() throws InterruptedException {
         welcomeText.setText("Welcome to JavaFX Application!");
         GraphicsContext gc = mainCanvas.getGraphicsContext2D();
-        Figure figure = new IFigure(3, 3, gc);
+        Figure figure = new LRightFigure(3, 3, gc);
         figure.draw();
         mainCanvas.setFocusTraversable(true);
-        mainCanvas.setOnKeyTyped(keyEvent -> {
+        mainWindow.setOnKeyTyped(keyEvent -> {
             System.out.println(keyEvent.getCharacter());
             if (keyEvent.getCharacter().equals("s")) {
                 figure.clear();
