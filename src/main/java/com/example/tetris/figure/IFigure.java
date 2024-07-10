@@ -24,8 +24,9 @@ public class IFigure extends Figure{
             cellList.get(3).setX(cellList.get(3).getX() - 2);
             cellList.get(3).setY(cellList.get(3).getY() + 2);
             this.position = 2;
+            this.fitInsideBoard();
             return true;
-        } else if (this.position == 2 && this.canRotate()) {
+        } else if (this.position == 2) {
             cellList.get(0).setX(cellList.get(0).getX() - 1);
             cellList.get(0).setY(cellList.get(0).getY() + 1);
             cellList.get(2).setX(cellList.get(2).getX() + 1);
@@ -33,16 +34,15 @@ public class IFigure extends Figure{
             cellList.get(3).setX(cellList.get(3).getX() + 2);
             cellList.get(3).setY(cellList.get(3).getY() - 2);
             this.position = 1;
+            this.fitInsideBoard();
             return true;
         } else return false;
     }
 
     private boolean canRotate() {
         if (position == 1) {
-            return cellList.get(0).getX() + 1 > 0
-                    && cellList.get(3).getY() + 2 < Settings.MAX_CELLS_HEIGHT
-                    && cellList.get(0).getY() - 1 >= 0;
-        } else return cellList.get(0).getX() - 1 >= 0
-                    && cellList.get(3).getX() + 2 < Settings.MAX_CELLS_WIDTH;
+            return cellList.get(3).getY() + 2 < Settings.MAX_CELLS_HEIGHT;
+        }
+        return true;
     }
 }
