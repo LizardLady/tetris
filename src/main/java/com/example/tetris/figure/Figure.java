@@ -71,7 +71,7 @@ public abstract class Figure {
                 maxXCell = cell;
             }
         }
-        while (maxXCell.getX() > Settings.MAX_CELLS_WIDTH) {
+        while (maxXCell.getX() > Settings.MAX_CELLS_WIDTH - 1) {
             this.moveLeft();
         }
 
