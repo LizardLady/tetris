@@ -5,12 +5,11 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class LLeftFigure extends Figure{
     private int position = 1;
-    public LLeftFigure(int x, int y, GraphicsContext context) {
-        super(context);
-        cellList.add(new Cell(x, y, context));
-        cellList.add(new Cell(x, y+1, context));
-        cellList.add(new Cell(x+1, y+1, context));
-        cellList.add(new Cell(x+2, y+1, context));
+    public LLeftFigure(int x, int y) {
+        cellList.add(new Cell(x, y));
+        cellList.add(new Cell(x, y+1));
+        cellList.add(new Cell(x+1, y+1));
+        cellList.add(new Cell(x+2, y+1));
     }
 
     @Override

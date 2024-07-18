@@ -5,12 +5,11 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class IFigure extends Figure{
     private int position = 1;
-    public IFigure(int x, int y, GraphicsContext context) {
-        super(context);
-        cellList.add(new Cell(x, y, context));
-        cellList.add(new Cell(x+1, y, context));
-        cellList.add(new Cell(x+2, y, context));
-        cellList.add(new Cell(x+3, y, context));
+    public IFigure(int x, int y) {
+        cellList.add(new Cell(x, y));
+        cellList.add(new Cell(x+1, y));
+        cellList.add(new Cell(x+2, y));
+        cellList.add(new Cell(x+3, y));
     }
 
 

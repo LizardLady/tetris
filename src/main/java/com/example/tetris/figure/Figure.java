@@ -7,14 +7,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class Figure {
+public abstract class Figure implements Cloneable{
     protected List<Cell> cellList = new ArrayList<>();
-    protected GraphicsContext context;
 
-    public Figure(GraphicsContext graphicsContext) {
-        this.context = graphicsContext;
+    public Figure() {
+
     }
 
+
+    public Figure(Figure figure) {
+        this.cellList = new ArrayList<>(figure.cellList);
+        this.cellList.replaceAll(Cell::new);
+    }
     public abstract boolean rotate();
 
     public void draw() {
@@ -44,6 +48,13 @@ public abstract class Figure {
 //            cell.moveDown();
 //        }
 //        return true;
+    }
+    public boolean moveUp() {
+        if(cellList.stream().allMatch(Cell::canMoveUp)) {
+            cellList.forEach(Cell::moveUp);
+            return true;
+        }
+        return false;
     }
 
     public boolean moveLeft() {
@@ -100,5 +111,19 @@ public abstract class Figure {
         }
     }
 
+    public List<Cell> getCellList() {
+        return cellList;
+    }
 
+    @Override
+    public Figure clone() {
+        try {
+            Figure clone = (Figure) super.clone();
+            clone.cellList = new ArrayList<>(this.cellList);
+            clone.cellList.replaceAll(Cell::new);
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 }

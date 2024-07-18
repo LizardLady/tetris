@@ -22,32 +22,36 @@ public class HelloController {
     protected void onHelloButtonClick() throws InterruptedException {
         welcomeText.setText("Welcome to JavaFX Application!");
         GraphicsContext gc = mainCanvas.getGraphicsContext2D();
-        Figure figure = new LRightFigure(3, 3, gc);
-        figure.draw();
+        Painter.registerGraphicsContext(gc);
+        GameEngine engine = new GameEngine();
+        DaemonGameThread thread = new DaemonGameThread(engine);
+        thread.start();
+
+
+
+
+
+
         mainCanvas.setFocusTraversable(true);
         mainWindow.setOnKeyTyped(keyEvent -> {
             System.out.println(keyEvent.getCharacter());
+            if (!engine.isGame()) {
+                return;
+            }
             if (keyEvent.getCharacter().equals("s")) {
-                figure.clear();
-                figure.moveDown();
-                figure.draw();
+                engine.tick();
             }
             if (keyEvent.getCharacter().equals("a")) {
-                figure.clear();
-                figure.moveLeft();
-                figure.draw();
+                engine.moveLeft();
             }
             if (keyEvent.getCharacter().equals("d")) {
-                figure.clear();
-                figure.moveRight();
-                figure.draw();
+                engine.moveRight();
             }
             if (keyEvent.getCharacter().equals("r")) {
-                figure.clear();
-                figure.rotate();
-                figure.draw();
+                engine.rotate();
             }
         });
+
 
     }
 }

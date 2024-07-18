@@ -5,4 +5,5 @@ public class Settings {
     public static final int MAX_CELLS_HEIGHT = 25;
     public static final double CANVAS_WIDTH = 200;
     public static final double CANVAS_HEIGHT = 500;
+    public static final double SPEED = 1;
 }

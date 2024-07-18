@@ -5,12 +5,11 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class LRightFigure extends Figure{
     private int position = 1;
-    public LRightFigure(int x, int y, GraphicsContext context) {
-        super(context);
-        cellList.add(new Cell(x, y+1, context));
-        cellList.add(new Cell(x+1, y+1, context));
-        cellList.add(new Cell(x+2, y+1, context));
-        cellList.add(new Cell(x+2, y, context));
+    public LRightFigure(int x, int y) {
+        cellList.add(new Cell(x, y+1));
+        cellList.add(new Cell(x+1, y+1));
+        cellList.add(new Cell(x+2, y+1));
+        cellList.add(new Cell(x+2, y));
     }
 
     @Override

@@ -1,6 +1,9 @@
 package com.example.tetris;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+
+import java.util.Set;
 
 public class Painter {
     private double sizeX;
@@ -8,8 +11,9 @@ public class Painter {
     private int cellsX;
     private int cellsY;
     private GraphicsContext context;
+    private static Painter instance;
 
-    public Painter(int cellsX, int cellsY, GraphicsContext context) {
+    private Painter(int cellsX, int cellsY, GraphicsContext context) {
         sizeX = context.getCanvas().getWidth();
         sizeY = context.getCanvas().getHeight();
         this.cellsX = cellsX;
@@ -18,10 +22,23 @@ public class Painter {
     }
 
     public void drawSquare(int x, int y) {
+        context.setFill(Color.BLACK);
         context.fillRect(sizeX/cellsX * x, sizeY/cellsY * y, sizeX/cellsX, sizeY/cellsY);
+        context.setFill(Color.PALEGREEN);
+        context.fillRect(sizeX/cellsX * (x + 0.1), sizeY/cellsY * (y + 0.1), sizeX/cellsX * 0.8, sizeY/cellsY * 0.8);
+        context.setFill(Color.BLACK);
+        context.fillRect(sizeX/cellsX * (x + 0.2), sizeY/cellsY * (y + 0.2), sizeX/cellsX * 0.6, sizeY/cellsY * 0.6);
     }
 
     public void clearSquare(int x, int y) {
         context.clearRect(sizeX/cellsX * x, sizeY/cellsY * y, sizeX/cellsX, sizeY/cellsY);
+    }
+
+    public static void registerGraphicsContext(GraphicsContext context){
+        instance = new Painter(Settings.MAX_CELLS_WIDTH, Settings.MAX_CELLS_HEIGHT, context);
+    }
+
+    public static Painter getInstance() {
+        return instance;
     }
 }
