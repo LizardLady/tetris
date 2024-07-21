@@ -27,9 +27,7 @@ public class Cell {
         painter.drawSquare(x, y);
     }
 
-    public void clear(){
-        painter.clearSquare(x, y);
-    }
+    public void clear(){ painter.clearSquare(x, y); }
 
     public void moveDown() {
         this.y += 1;
