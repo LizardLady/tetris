@@ -19,6 +19,7 @@ public class Painter {
         this.cellsX = cellsX;
         this.cellsY = cellsY;
         this.context = context;
+        this.clearAll();
     }
 
     public void drawSquare(int x, int y) {
@@ -37,6 +38,26 @@ public class Painter {
         context.fillRect(sizeX/cellsX * (x + 0.1), sizeY/cellsY * (y + 0.1), sizeX/cellsX * 0.8, sizeY/cellsY * 0.8);
         context.setFill(Settings.CELL_COLOR);
         context.fillRect(sizeX/cellsX * (x + 0.2), sizeY/cellsY * (y + 0.2), sizeX/cellsX * 0.6, sizeY/cellsY * 0.6);
+    }
+
+    public void clearAll() {
+        for (int y = 0; y < Settings.MAX_CELLS_HEIGHT; ++y) {
+            for (int x = 0; x < Settings.MAX_CELLS_WIDTH; ++x) {
+                clearSquare(x, y);
+            }
+        }
+    }
+
+    public void drawLine(int line) {
+        for (int x = 0; x < Settings.MAX_CELLS_WIDTH; ++x) {
+            drawSquare(x, line);
+        }
+    }
+
+    public void clearLine(int line) {
+        for (int x = 0; x < Settings.MAX_CELLS_WIDTH; ++x) {
+            clearSquare(x, line);
+        }
     }
 
     public static void registerGraphicsContext(GraphicsContext context){

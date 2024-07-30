@@ -17,17 +17,19 @@ public class ZRightFigure extends Figure{
     public boolean rotate() {
         if (this.position == 1 && this.canRotate()) {
             cellList.get(0).setY(cellList.get(0).getY() + 1);
-            cellList.get(1).setX(cellList.get(1).getX() - 1);
+            cellList.get(0).setX(cellList.get(0).getX() + 1);
             cellList.get(2).setY(cellList.get(2).getY() + 1);
-            cellList.get(3).setX(cellList.get(3).getX() - 1);
+            cellList.get(2).setX(cellList.get(2).getX() - 1);
+            cellList.get(3).setX(cellList.get(3).getX() - 2);
             this.position = 2;
             this.fitInsideBoard();
             return true;
         } else if (this.position == 2 && this.canRotate()) {
             cellList.get(0).setY(cellList.get(0).getY() - 1);
-            cellList.get(1).setX(cellList.get(1).getX() + 1);
+            cellList.get(0).setX(cellList.get(0).getX() - 1);
             cellList.get(2).setY(cellList.get(2).getY() - 1);
-            cellList.get(3).setX(cellList.get(3).getX() + 1);
+            cellList.get(2).setX(cellList.get(2).getX() + 1);
+            cellList.get(3).setX(cellList.get(3).getX() + 2);
             this.position = 1;
             this.fitInsideBoard();
             return true;

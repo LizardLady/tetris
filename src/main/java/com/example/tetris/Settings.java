@@ -7,8 +7,8 @@ public class Settings {
     public static final int MAX_CELLS_HEIGHT = 25;
     public static final double CANVAS_WIDTH = 200;
     public static final double CANVAS_HEIGHT = 500;
-    public static final double SPEED = 1;
-    public static final Color GROUND_COLOR = Color.PALEGREEN;
-    public static final Color FIGURE_COLOR = Color.BLACK;
-    public static final Color CELL_COLOR = Color.GRAY;
+    public static final double SPEED = 5;
+    public static final Color GROUND_COLOR = Color.web("#7D8471");
+    public static final Color FIGURE_COLOR = Color.web("#2C2F27");
+    public static final Color CELL_COLOR = Color.web("#919A7E");
 }

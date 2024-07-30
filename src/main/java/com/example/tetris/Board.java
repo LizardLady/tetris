@@ -9,6 +9,7 @@ public class Board {
     private Figure currentFigure;
     private final List<Cell> boardCells = new LinkedList<>();
 
+
     public List<Integer> getFullLines() {
         List<Integer> fullLines = new ArrayList<>();
         List<Integer> cellsInLine = new ArrayList<>();
@@ -36,6 +37,7 @@ public class Board {
         }
     }
 
+
     public void moveDown(int distance, int fromRow) {
         for (Cell cell : boardCells) {
             if (cell.getY() < fromRow) {
@@ -43,6 +45,7 @@ public class Board {
             }
         }
     }
+
 
     public boolean hasCollisions() {
         return boardCells.stream()

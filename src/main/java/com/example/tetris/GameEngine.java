@@ -1,9 +1,8 @@
 package com.example.tetris;
 
-import com.example.tetris.figure.Cell;
 import com.example.tetris.figure.Figure;
 import com.example.tetris.figure.IFigure;
-import com.example.tetris.figure.LRightFigure;
+import javafx.beans.property.StringProperty;
 
 import java.util.Collections;
 import java.util.List;
@@ -12,12 +11,24 @@ public class GameEngine {
     private Board board = new Board();
     private boolean game = true;
     private FigureFactory figureFactory = new FigureFactoryImpl();
+    private ScoreHandler scoreHandler;
+    private boolean skipTick = false;
+    private Figure nextFigure = figureFactory.getFigure();
 
-    public GameEngine() {
+
+    public GameEngine(StringProperty label) {
         board.setCurrentFigure(new IFigure(4, 0));
         board.getCurrentFigure().draw();
+        scoreHandler = new ScoreHandler(label);
     }
 
+    public Boolean getSkipTick() {
+        return skipTick;
+    }
+
+    public void setSkipTick(Boolean skipTick) {
+        this.skipTick = skipTick;
+    }
 
     public boolean isGame() {
         return game;
@@ -27,7 +38,10 @@ public class GameEngine {
         this.game = game;
     }
 
-    public void moveLeft() {
+    public synchronized void moveLeft() {
+        if(board.getCurrentFigure() == null) {
+            return;
+        }
         board.getCurrentFigure().clear();
         board.getCurrentFigure().moveLeft();
         if (board.hasCollisions()) {
@@ -35,7 +49,10 @@ public class GameEngine {
         }
         board.getCurrentFigure().draw();
     }
-    public void moveRight() {
+    public synchronized void moveRight() {
+        if(board.getCurrentFigure() == null) {
+            return;
+        }
         board.getCurrentFigure().clear();
         board.getCurrentFigure().moveRight();
         if (board.hasCollisions()) {
@@ -44,7 +61,10 @@ public class GameEngine {
         board.getCurrentFigure().draw();
     }
 
-    public boolean moveDown() {
+    public synchronized boolean moveDown() {
+        if(board.getCurrentFigure() == null) {
+            return true;
+        }
         board.getCurrentFigure().clear();
         boolean isMoved = board.getCurrentFigure().moveDown();
         if (board.hasCollisions()) {
@@ -56,7 +76,10 @@ public class GameEngine {
         return isMoved;
     }
 
-    public void rotate() {
+    public synchronized void rotate() {
+        if(board.getCurrentFigure() == null) {
+            return;
+        }
         board.getCurrentFigure().clear();
         Figure copyFigure = board.getCurrentFigure().clone();
         board.getCurrentFigure().rotate();
@@ -66,19 +89,51 @@ public class GameEngine {
         board.getCurrentFigure().draw();
     }
 
-    public boolean tick() {
+    public void dropDown() {
+        Figure currentFigure = this.board.getCurrentFigure();
+        while (currentFigure == this.board.getCurrentFigure() && !this.skipTick && this.isGame()) {
+            tick();
+        }
+    }
+
+    public synchronized boolean tick() {
+        if (skipTick) {
+            return true;
+        }
+
 
         if (!moveDown()) {
             board.freezeFigure();
-            board.clearAll();
             List<Integer> fullLines = board.getFullLines();
-            board.getFullLines().forEach(line -> board.removeLine(line));
-            Collections.sort(fullLines);
-            fullLines.forEach(line -> board.moveDown(1, line));
-            board.drawAll();
-            board.setCurrentFigure(figureFactory.getFigure());
+            scoreHandler.handler(fullLines.size());
+            Thread thread = new Thread(this::threadLogic);
+            thread.start();
+
         }
         game = !board.isFull();
         return game;
+    }
+
+    public void threadLogic() {
+        this.skipTick = true;
+        List<Integer> fullLines = board.getFullLines();
+        try{
+            for (int i = 0; i < 3; ++i) {
+                fullLines.forEach(line -> Painter.getInstance().clearLine(line));
+                Thread.sleep(100);
+                fullLines.forEach(line -> Painter.getInstance().drawLine(line));
+                Thread.sleep(100);
+            }
+        } catch (InterruptedException interruptedException) {
+
+        }
+        board.clearAll();
+        fullLines.forEach(line -> board.removeLine(line));
+        Collections.sort(fullLines);
+        fullLines.forEach(line -> board.moveDown(1, line));
+        board.drawAll();
+        board.setCurrentFigure(this.nextFigure);
+        this.nextFigure = figureFactory.getFigure();
+        this.skipTick = false;
     }
 }
