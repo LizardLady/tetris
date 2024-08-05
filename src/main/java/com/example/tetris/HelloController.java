@@ -29,6 +29,8 @@ public class HelloController {
     protected void onHelloButtonClick() throws InterruptedException {
         GraphicsContext gc = mainCanvas.getGraphicsContext2D();
         Painter.registerGraphicsContext(gc);
+        GraphicsContext nextFigureGC = nextFigureCanvas.getGraphicsContext2D();
+        Painter.registerGraphicsContext(nextFigureGC, "nextFigure", 4, 4);
         GameEngine engine = new GameEngine(welcomeText.textProperty());
 
 

@@ -3,6 +3,8 @@ package com.example.tetris;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 public class Painter {
@@ -12,6 +14,7 @@ public class Painter {
     private int cellsY;
     private GraphicsContext context;
     private static Painter instance;
+    private static Map<String, Painter> painterMap = new HashMap<>();
 
     private Painter(int cellsX, int cellsY, GraphicsContext context) {
         sizeX = context.getCanvas().getWidth();
@@ -66,5 +69,13 @@ public class Painter {
 
     public static Painter getInstance() {
         return instance;
+    }
+
+    public static void registerGraphicsContext(GraphicsContext context, String name, int x, int y) {
+        painterMap.put(name, new Painter(x, y, context));
+    }
+
+    public static Painter getInstance(String name) {
+        return painterMap.get(name);
     }
 }

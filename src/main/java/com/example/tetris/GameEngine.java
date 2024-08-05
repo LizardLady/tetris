@@ -1,7 +1,7 @@
 package com.example.tetris;
 
+import com.example.tetris.figure.Cell;
 import com.example.tetris.figure.Figure;
-import com.example.tetris.figure.IFigure;
 import javafx.beans.property.StringProperty;
 
 import java.util.Collections;
@@ -14,12 +14,13 @@ public class GameEngine {
     private ScoreHandler scoreHandler;
     private boolean skipTick = false;
     private Figure nextFigure = figureFactory.getFigure();
-
+    private Painter nextFigurePainter = Painter.getInstance("nextFigure");
 
     public GameEngine(StringProperty label) {
-        board.setCurrentFigure(new IFigure(4, 0));
+        board.setCurrentFigure(figureFactory.getFigure());
         board.getCurrentFigure().draw();
         scoreHandler = new ScoreHandler(label);
+        drawNextFigure();
     }
 
     public Boolean getSkipTick() {
@@ -96,6 +97,35 @@ public class GameEngine {
         }
     }
 
+    private void drawNextFigure(){
+        nextFigurePainter.clearAll();
+        Cell leftestOFHighs = new Cell(Settings.MAX_CELLS_WIDTH, Settings.MAX_CELLS_HEIGHT);
+        Cell highestOfLefts = new Cell(Settings.MAX_CELLS_WIDTH, Settings.MAX_CELLS_HEIGHT);
+        for (Cell cell : nextFigure.getCellList()) {
+            if (cell.getY() < leftestOFHighs.getY()) {
+                leftestOFHighs.setY(cell.getY());
+                leftestOFHighs.setX(cell.getX());
+            }
+            if (cell.getY() == leftestOFHighs.getY() && cell.getX() < leftestOFHighs.getX()) {
+                leftestOFHighs.setX(cell.getX());
+                leftestOFHighs.setY(cell.getY());
+            }
+            if (cell.getX() < highestOfLefts.getX()) {
+                highestOfLefts.setX(cell.getX());
+                highestOfLefts.setY(cell.getY());
+            }
+            if (cell.getX() == highestOfLefts.getX() && cell.getY() < highestOfLefts.getY()) {
+                highestOfLefts.setY(cell.getY());
+                highestOfLefts.setX(cell.getX());
+            }
+        }
+
+        for (Cell cell : nextFigure.getCellList()) {
+            nextFigurePainter.drawSquare(cell.getX() - highestOfLefts.getX(), cell.getY() - leftestOFHighs.getY());
+        }
+    }
+
+
     public synchronized boolean tick() {
         if (skipTick) {
             return true;
@@ -106,7 +136,7 @@ public class GameEngine {
             board.freezeFigure();
             List<Integer> fullLines = board.getFullLines();
             scoreHandler.handler(fullLines.size());
-            Thread thread = new Thread(this::threadLogic);
+            Thread thread = new Thread(this::tickLogic);
             thread.start();
 
         }
@@ -114,7 +144,7 @@ public class GameEngine {
         return game;
     }
 
-    public void threadLogic() {
+    public void tickLogic() {
         this.skipTick = true;
         List<Integer> fullLines = board.getFullLines();
         try{
@@ -134,6 +164,7 @@ public class GameEngine {
         board.drawAll();
         board.setCurrentFigure(this.nextFigure);
         this.nextFigure = figureFactory.getFigure();
+        drawNextFigure();
         this.skipTick = false;
     }
 }
